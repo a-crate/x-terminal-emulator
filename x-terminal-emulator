@@ -1,0 +1,14 @@
+#!/bin/bash
+if [[ -z $TERMINAL ]]; then
+	TERM="$(gsettings get org.gnome.desktop.default-applications.terminal exec)"
+else
+	exec $TERMINAL
+fi
+if [[ -z ${TERM:1:-1} ]]; then
+	for term in "$TERMINAL" mate-terminal gnome-terminal terminator xfce4-terminal urxvt rxvt termit Eterm aterm uxterm xterm roxterm termite lxterminal terminology st qterminal lilyterm tilix terminix konsole kitty guake tilda alacritty; do
+		type -P $term && exec $term
+	done
+else
+	TERMARGS="$(gsettings get org.gnome.desktop.default-applications.terminal exec-arg)"
+	exec ${TERM:1:-1} ${TERMARGS:1:-1}
+fi
